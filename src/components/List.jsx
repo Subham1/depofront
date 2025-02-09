@@ -13,14 +13,17 @@ const List = () => {
   const navigate = useNavigate();
   
   const [currentPage, setCurrentPage] = useState(1);
-  const restaurantsPerPage = 12;
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch all restaurants on initial load
+  // Fetch restaurants for the current page
   useEffect(() => {
-    axios.get("https://back-6s19.onrender.com/api/restaurants")
-      .then(res => setRestaurants(res.data))
+    axios.get(`https://back-6s19.onrender.com/api/restaurants?page=${currentPage}`)
+      .then(res => {
+        setRestaurants(res.data.restaurants);
+        setTotalPages(res.data.totalPages);
+      })
       .catch(err => console.error(err));
-  }, []);
+  }, [currentPage]);
 
   // Handle search by name
   const handleSearchByName = () => {
@@ -42,14 +45,9 @@ const List = () => {
       .catch(err => console.error(err));
   };
 
-  // Determine restaurants for the current page
-  const indexOfLastRestaurant = currentPage * restaurantsPerPage;
-  const indexOfFirstRestaurant = indexOfLastRestaurant - restaurantsPerPage;
-  const currentRestaurants = restaurants.slice(indexOfFirstRestaurant, indexOfLastRestaurant);
-
   // Pagination handlers
   const nextPage = () => {
-    if (currentPage < Math.ceil(restaurants.length / restaurantsPerPage)) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -99,7 +97,7 @@ const List = () => {
 
       {/* Restaurant Cards */}
       <div className="row">
-        {currentRestaurants.map((restaurant) => (
+        {restaurants.map((restaurant) => (
           <div key={restaurant._id} className="col-md-3 mb-4">
             <div className="card shadow-sm border-0 h-100">
               <div className="card-body">
@@ -128,7 +126,7 @@ const List = () => {
       </div>
 
       {/* Pagination Buttons */}
-      {restaurants.length > restaurantsPerPage && (
+      {totalPages > 1 && (
         <div className="d-flex justify-content-center mt-4">
           <button 
             className="btn btn-outline-danger mx-2" 
@@ -138,12 +136,12 @@ const List = () => {
             Prev
           </button>
           <span className="align-self-center">
-            Page {currentPage} of {Math.ceil(restaurants.length / restaurantsPerPage)}
+            Page {currentPage} of {totalPages}
           </span>
           <button 
             className="btn btn-outline-danger mx-2" 
             onClick={nextPage} 
-            disabled={currentPage >= Math.ceil(restaurants.length / restaurantsPerPage)}
+            disabled={currentPage >= totalPages}
           >
             Next
           </button>
