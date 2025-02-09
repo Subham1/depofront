@@ -17,14 +17,14 @@ const List = () => {
 
   // Fetch all restaurants on initial load
   useEffect(() => {
-    axios.get("http://localhost:5000/api/restaurants")
+    axios.get("https://back-6s19.onrender.com/api/restaurants")
       .then(res => setRestaurants(res.data))
       .catch(err => console.error(err));
   }, []);
 
   // Handle search by name
   const handleSearchByName = () => {
-    axios.get(`http://localhost:5000/api/restaurants/search/name?name=${searchName}`)
+    axios.get(`https://back-6s19.onrender.com/api/restaurants/search/name?name=${searchName}`)
       .then(res => {
         setRestaurants(res.data);  // Replace restaurants with search results
         setCurrentPage(1);  // Reset pagination to first page
@@ -34,7 +34,7 @@ const List = () => {
 
   // Handle search by location
   const handleSearchByLocation = () => {
-    axios.get(`http://localhost:5000/api/restaurants/search/location?lat=${latitude}&lng=${longitude}`)
+    axios.get(`https://back-6s19.onrender.com/api/restaurants/search/location?lat=${latitude}&lng=${longitude}`)
       .then(res => {
         setRestaurants(res.data);
         setCurrentPage(1);

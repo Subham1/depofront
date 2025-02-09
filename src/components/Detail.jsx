@@ -10,7 +10,7 @@ const Detail = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/restaurants/${id}`)
+    axios.get(`https://back-6s19.onrender.com/api/restaurants/${id}`)
       .then(res => setRestaurant(res.data))
       .catch(err => {
         console.error(err);
