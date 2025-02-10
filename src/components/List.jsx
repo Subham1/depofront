@@ -6,7 +6,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import './List.css';
 
 const List = () => {
-  const [restaurants, setRestaurants] = useState([]);  // Stores backend data (full or search results)
+  const [restaurants, setRestaurants] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -15,7 +15,6 @@ const List = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch restaurants for the current page
   useEffect(() => {
     axios.get(`https://back-6s19.onrender.com/api/restaurants?page=${currentPage}`)
       .then(res => {
@@ -25,17 +24,15 @@ const List = () => {
       .catch(err => console.error(err));
   }, [currentPage]);
 
-  // Handle search by name
   const handleSearchByName = () => {
     axios.get(`https://back-6s19.onrender.com/api/restaurants/search/name?name=${searchName}`)
       .then(res => {
-        setRestaurants(res.data);  // Replace restaurants with search results
-        setCurrentPage(1);  // Reset pagination to first page
+        setRestaurants(res.data);
+        setCurrentPage(1);
       })
       .catch(err => console.error(err));
   };
 
-  // Handle search by location
   const handleSearchByLocation = () => {
     axios.get(`https://back-6s19.onrender.com/api/restaurants/search/location?lat=${latitude}&lng=${longitude}`)
       .then(res => {
@@ -45,7 +42,6 @@ const List = () => {
       .catch(err => console.error(err));
   };
 
-  // Pagination handlers
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -64,7 +60,6 @@ const List = () => {
         Find your desired Restaurant
       </h2>
 
-      {/* Search by Name */}
       <div className="d-flex flex-wrap gap-2 justify-content-center mb-3">
         <input 
           type="text" 
@@ -76,7 +71,6 @@ const List = () => {
         <button className="btn btn-danger" onClick={handleSearchByName}>Search</button>
       </div>
 
-      {/* Search by Location */}
       <div className="d-flex flex-wrap gap-2 justify-content-center mb-4">
         <input 
           type="number" 
@@ -95,11 +89,18 @@ const List = () => {
         <button className="btn btn-danger" onClick={handleSearchByLocation}>Search</button>
       </div>
 
-      {/* Restaurant Cards */}
       <div className="row">
         {restaurants.map((restaurant) => (
           <div key={restaurant._id} className="col-md-3 mb-4">
             <div className="card shadow-sm border-0 h-100">
+              {restaurant.featured_image && (
+                <img 
+                  src={restaurant.featured_image} 
+                  alt={restaurant["Restaurant Name"]} 
+                  className="card-img-top img-fluid" 
+                  style={{ height: "200px", objectFit: "cover" }}
+                />
+              )}
               <div className="card-body">
                 <h5 className="card-title">{restaurant["Restaurant Name"]}</h5>
                 <p className="card-text text-muted mb-1"><strong>City:</strong> {restaurant.City}</p>
@@ -125,7 +126,6 @@ const List = () => {
         ))}
       </div>
 
-      {/* Pagination Buttons */}
       {totalPages > 1 && (
         <div className="d-flex justify-content-center mt-4">
           <button 
