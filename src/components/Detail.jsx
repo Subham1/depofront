@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaMapMarkerAlt,FaCity,FaCalendarCheck,FaBuilding, FaConciergeBell, FaDollarSign, FaUtensils, FaStar, FaClipboardList, FaVoteYea } from 'react-icons/fa';
-import './Detail.css'
+import { FaMapMarkerAlt, FaCity, FaCalendarCheck, FaBuilding, FaConciergeBell, FaDollarSign, FaUtensils, FaStar, FaClipboardList, FaVoteYea } from 'react-icons/fa';
+import './Detail.css';
+
 const Detail = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
@@ -25,11 +26,8 @@ const Detail = () => {
     { label: "Restaurant ID", value: restaurant["Restaurant ID"], icon: <FaClipboardList /> },
     { label: "Restaurant Name", value: restaurant["Restaurant Name"], icon: <FaUtensils /> },
     { label: "Cuisine", value: restaurant.Cuisines || "Not available", icon: <FaUtensils /> },
-   
     { label: "Rating", value: `${restaurant["Aggregate rating"]} - ${restaurant["Rating text"]}`, icon: <FaStar /> },
-   
     { label: "City", value: restaurant.City || "City not available", icon: <FaCity /> },
-   
     { label: "Location", value: `${restaurant.Latitude}, ${restaurant.Longitude}` || "Location not available", icon: <FaMapMarkerAlt /> },
     { label: "Votes", value: restaurant.Votes, icon: <FaVoteYea /> },
     { label: "Average Cost for Two", value: `${restaurant["Average Cost for two"]} ${restaurant.Currency}`, icon: <FaDollarSign /> },
@@ -42,44 +40,45 @@ const Detail = () => {
 
   return (
     <div className="container mt-4">
-  <h2>{restaurant["Restaurant Name"]}</h2>
-
-  <div className="main-details mt-3">
-    <p><strong>Address:</strong> {restaurant.Address || "Address not available"}</p>
-    <p><strong>City:</strong> {restaurant.City || "City not available"}</p>
-    <p><strong>Location:</strong> {restaurant.Latitude ? `${restaurant.Latitude}, ${restaurant.Longitude}` : "Location not available"}</p>
-  </div>
-
-  <div className="restaurant-details mt-4">
-    {/* Side Heading for the Details */}
-    <div className="details-heading d-flex align-items-center mb-3">
-     
-      <h4 className="m-0">Details of Restaurant</h4>
+      {/* Restaurant Image */}
+      <div className="text-center">
+        <img src={restaurant.featured_image || "https://via.placeholder.com/600x300"} alt={restaurant["Restaurant Name"]} className="img-fluid rounded shadow-lg" style={{ maxHeight: "300px" }} />
+      </div>
       
-    </div>
+      <h2 className="text-center mt-3">{restaurant["Restaurant Name"]}</h2>
+      
+      <div className="main-details mt-3">
+        <p><strong>Address:</strong> {restaurant.Address || "Address not available"}</p>
+        <p><strong>City:</strong> {restaurant.City || "City not available"}</p>
+        <p><strong>Location:</strong> {restaurant.Latitude ? `${restaurant.Latitude}, ${restaurant.Longitude}` : "Location not available"}</p>
+      </div>
 
-    <div className="row mt-3">
-      {restaurantDetails.map((detail, index) => (
-        <div key={index} className="col-12 col-md-6 col-lg-3 mb-4">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center">
-                <div className="icon me-3">
-                  {detail.icon}
-                </div>
-                <div>
-                  <h5 className="card-title">{detail.label}</h5>
-                  <p className="card-text">{detail.value}</p>
+      <div className="restaurant-details mt-4">
+        <div className="details-heading d-flex align-items-center mb-3">
+          <h4 className="m-0">Details of Restaurant</h4>
+        </div>
+
+        <div className="row mt-3">
+          {restaurantDetails.map((detail, index) => (
+            <div key={index} className="col-12 col-md-6 col-lg-3 mb-4">
+              <div className="card">
+                <div className="card-body">
+                  <div className="d-flex align-items-center">
+                    <div className="icon me-3">
+                      {detail.icon}
+                    </div>
+                    <div>
+                      <h5 className="card-title">{detail.label}</h5>
+                      <p className="card-text">{detail.value}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
-  </div>
-</div>
-
   );
 };
 
